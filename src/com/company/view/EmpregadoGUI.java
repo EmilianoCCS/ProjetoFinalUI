@@ -83,12 +83,14 @@ public class EmpregadoGUI {
             public void mouseClicked(MouseEvent e) {
                 try {
                     if(empregado!= null){
-                        GerenciarEmpregado.listaEmpregados.remove(empregado);
+                        GerenciarEmpregado.removerEmpregado(empregado);
                         LimparCampos();
                         mensagemDeletado();
+                        empregado = new Empregado();
                     }
                 }
                 catch (Exception erro){
+                    mensagemErro();
                     System.out.println(erro);
                 }
             }
@@ -171,6 +173,7 @@ public class EmpregadoGUI {
             ge.adcionarEmpregado(empregado);
             ge.listarTodosEmpregados();
             LimparCampos();
+            empregado = new Empregado();
         }
     }
 
@@ -205,6 +208,13 @@ public class EmpregadoGUI {
         JOptionPane.showMessageDialog(null,
                 "Todos os campos devem estar preenchidos",
                 "Campos não preenchidos",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void mensagemEmpregadoDulicado(){
+        JOptionPane.showMessageDialog(null,
+                "Código de usuário já cadastrado!",
+                "Empregado já existe",
                 JOptionPane.ERROR_MESSAGE);
     }
 

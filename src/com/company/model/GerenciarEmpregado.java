@@ -14,7 +14,7 @@ public class GerenciarEmpregado {
             listaEmpregados.add(empregado);
             EmpregadoGUI.mensagemSucesso();
         }else {
-            EmpregadoGUI.mensagemErro();
+            EmpregadoGUI.mensagemEmpregadoDulicado();
             System.out.println("Usuario já Cadastrado!");
         }
     }
@@ -28,7 +28,9 @@ public class GerenciarEmpregado {
         return (ArrayList) listaEmpregados;
     }
 
-    public void removerEmpregado(Empregado empregado){}
+    public static void removerEmpregado(Empregado empregado){
+        listaEmpregados.remove(empregado);
+    }
 
     public static boolean verificarExistencia(Empregado empregado){
         for (Empregado emp: listaEmpregados) {
