@@ -1,5 +1,6 @@
 package com.company.model;
 
+import com.company.helper.message;
 import com.company.view.EmpregadoGUI;
 
 import javax.swing.table.DefaultTableModel;
@@ -9,12 +10,12 @@ import java.util.List;
 public class GerenciarEmpregado {
     public static List<Empregado> listaEmpregados = new ArrayList<Empregado>();
 
-    public void adcionarEmpregado(Empregado empregado){
-        if(verificarExistencia(empregado)){
-            listaEmpregados.add(empregado);
-            EmpregadoGUI.mensagemSucesso();
+    public void adcionarEmpregado(Empregado empregado){ // Recebe um empregado como argumento
+        if(verificarExistencia(empregado)){ // Verifica se existe
+            listaEmpregados.add(empregado); //Adiciona a lista o empregado atual
+            message.mensagemSucesso();
         }else {
-            EmpregadoGUI.mensagemEmpregadoDulicado();
+            message.mensagemEmpregadoDulicado();
             System.out.println("Usuario já Cadastrado!");
         }
     }
@@ -24,7 +25,6 @@ public class GerenciarEmpregado {
             System.out.println(emp);
         }
         System.out.println("-------------------");
-//        System.out.println(listaEmpregados);
         return (ArrayList) listaEmpregados;
     }
 
@@ -33,8 +33,8 @@ public class GerenciarEmpregado {
     }
 
     public static boolean verificarExistencia(Empregado empregado){
-        for (Empregado emp: listaEmpregados) {
-            if(emp.getCodigoEmpregado() == (empregado.getCodigoEmpregado())){
+        for (Empregado emp: listaEmpregados) { // Percorre a lista de empregados
+            if(emp.getCodigoEmpregado() == (empregado.getCodigoEmpregado())){ // Verifica se o código de entrada é o mesmo do que o usuário atual da lista
                 System.out.println("Ja cadastrado");
                 return false;
             }

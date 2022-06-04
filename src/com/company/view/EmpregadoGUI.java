@@ -1,5 +1,6 @@
 package com.company.view;
 
+import com.company.helper.message;
 import com.company.model.Empregado;
 import com.company.model.GerenciarEmpregado;
 import com.company.model.ParametrosInss;
@@ -9,8 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class EmpregadoGUI {
-    private JTextField textFieldNomeEmpregado;
-    private JTextField textFieldCodigoEmpregado;
+    private JTextField textFieldNomeEmpregado; //Campo para inserir o nome do usuário
+    private JTextField textFieldCodigoEmpregado; // Campo para inserir o código
     private JTextField textFieldSetor;
     private JTextField textFieldSalarioBruto;
     private JButton calcularRecolhimentoINSSButton;
@@ -31,8 +32,6 @@ public class EmpregadoGUI {
     public Empregado empregado;
     public GerenciarEmpregado ge = new GerenciarEmpregado();
     public ParametrosInss inss;
-//    Integer i=0;
-
 
     public JPanel getPanelTelaCadastro(){
         return JPanelTelaCadastro;
@@ -48,10 +47,6 @@ public class EmpregadoGUI {
         calcularRecolhimentoINSSButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                textFieldCodigoEmpregado.setText(String.valueOf(i++));
-//                textFieldNomeEmpregado.setText("Nome do caboclo");
-//                textFieldSetor.setText("Logistica");
-//                textFieldSalarioBruto.setText(String.valueOf(1500));
                 CalcularRecolhimentoInss();
             }
         });
@@ -85,12 +80,12 @@ public class EmpregadoGUI {
                     if(empregado!= null){
                         GerenciarEmpregado.removerEmpregado(empregado);
                         LimparCampos();
-                        mensagemDeletado();
+                        message.mensagemDeletado();
                         empregado = new Empregado();
                     }
                 }
                 catch (Exception erro){
-                    mensagemErro();
+                    message.mensagemErro();
                     System.out.println(erro);
                 }
             }
@@ -99,9 +94,9 @@ public class EmpregadoGUI {
 
     public void CalcularRecolhimentoInss() {
         try{
-            empregado = new Empregado();
-            inss = new ParametrosInss();
-            Integer codigo = Integer.parseInt(textFieldCodigoEmpregado.getText());
+            empregado = new Empregado(); // Cria um novo objeto Empregado
+            inss = new ParametrosInss(); // Cria um objeto Inss
+            Integer codigo = Integer.parseInt(textFieldCodigoEmpregado.getText()); // Variavel código recebe o que esta no campo de texto textFieldCodigoEmpregado
             String nome = textFieldNomeEmpregado.getText();
             String setor = textFieldSetor.getText();
             Double salarioBruto = Double.parseDouble(textFieldSalarioBruto.getText());
@@ -109,17 +104,17 @@ public class EmpregadoGUI {
             empregado.setNomeEmpregado(nome);
             empregado.setSetor(setor);
             empregado.setSalarioBruto(salarioBruto);
-            empregado.setRecInss(valorRecolhimentoInss(salarioBruto));
-            LabelValorRecolhido.setText(String.valueOf(empregado.getRecInss()));
+            empregado.setRecInss(valorRecolhimentoInss(salarioBruto)); //Recebe o valor da função valorRecolhimentoInss e salva em RecInss
+            LabelValorRecolhido.setText(String.valueOf(empregado.getRecInss())); //Colocando o valor do atibuto RecInss na label
 
 
         }catch (Exception e){
-            mensagemInformativa();
+            message.mensagemInformativa();
             System.out.println(e);
         }
     }
 
-    public double valorRecolhimentoInss(double salarioBruto)
+    public double valorRecolhimentoInss(double salarioBruto) // Calcula o valor de recolhimento do INSS
     {
         double recolhimento = 0.0;
 
@@ -149,6 +144,7 @@ public class EmpregadoGUI {
             return recolhimento += (salarioBruto- inss.LIMITEFAIXA3) * inss.FAIXA4;
         }
 
+        //MAIOR QUE A FAIXA 4
         recolhimento += inss.LIMITEFAIXA1* inss.FAIXA1;
         recolhimento += (inss.LIMITEFAIXA2-inss.LIMITEFAIXA1) * inss.FAIXA2;
         recolhimento += (inss.LIMITEFAIXA3-inss.LIMITEFAIXA2) * inss.FAIXA3;
@@ -157,11 +153,11 @@ public class EmpregadoGUI {
     }
 
     public void abrirGrupoEmpregados(){
-        try {
-            JFrame gerenciarEmpregado = new JFrame();
-            gerenciarEmpregado.setContentPane(new GerenciarEmpregadosGUI().getPanelEmpregados());
-            gerenciarEmpregado.setSize(500,350);
-            gerenciarEmpregado.setVisible(true);
+        try { //Try catch para caso dê algum erro na lista
+            JFrame gerenciarEmpregado = new JFrame(); // Cria um novo objeto do tipo JFrame com o nome gerenciarEmpregado
+            gerenciarEmpregado.setContentPane(new GerenciarEmpregadosGUI().getPanelEmpregados()); // Setar o Panel com o getPanelEmpregado
+            gerenciarEmpregado.setSize(500,350); // Informar o tamanho da tela
+            gerenciarEmpregado.setVisible(true); // Deixar visivel
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,7 +165,7 @@ public class EmpregadoGUI {
     }
 
     public void adicionarEmpregado(){
-        if(validaCampos()){
+        if(validaCampos()){ //Se for verdadeiro segue nessa parte
             ge.adcionarEmpregado(empregado);
             ge.listarTodosEmpregados();
             LimparCampos();
@@ -187,48 +183,14 @@ public class EmpregadoGUI {
 
     public boolean validaCampos(){
         if ((empregado.getNomeEmpregado() == null) && (empregado.getSetor()==null)){
-            mensagemErro();
+            message.mensagemErro();
             return false;
         }
         if (empregado == null){
-            mensagemErro();
+            message.mensagemErro();
             return false;
         }
         return true;
     }
 
-    public static void mensagemSucesso(){
-        JOptionPane.showMessageDialog(null,
-                "Cadastro realizado com sucesso",
-                "Empregado cadastrado",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public static void mensagemErro(){
-        JOptionPane.showMessageDialog(null,
-                "Todos os campos devem estar preenchidos",
-                "Campos não preenchidos",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void mensagemEmpregadoDulicado(){
-        JOptionPane.showMessageDialog(null,
-                "Código de usuário já cadastrado!",
-                "Empregado já existe",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void mensagemInformativa(){
-        JOptionPane.showMessageDialog(null,
-                "Verifique as informações dos campos",
-                "Informações inválidas",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public static void mensagemDeletado(){
-        JOptionPane.showMessageDialog(null,
-                "Usuario deletado com sucesso",
-                "Deletado",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
 }
