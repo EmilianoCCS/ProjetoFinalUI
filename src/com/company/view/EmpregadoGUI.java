@@ -77,15 +77,16 @@ public class EmpregadoGUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    if(empregado!= null){
+                    if((empregado!= null) && validaCampos()){
                         GerenciarEmpregado.removerEmpregado(empregado);
                         LimparCampos();
                         message.mensagemDeletado();
                         empregado = new Empregado();
+                    }else{
+                        message.mensagemUsurioNaoEncontrado();
                     }
                 }
                 catch (Exception erro){
-                    message.mensagemErro();
                     System.out.println(erro);
                 }
             }
@@ -151,7 +152,6 @@ public class EmpregadoGUI {
         recolhimento += (inss.LIMITEFAIXA4-inss.LIMITEFAIXA3) * inss.FAIXA4;
         return recolhimento;
     }
-
     public void abrirGrupoEmpregados(){
         try { //Try catch para caso dê algum erro na lista
             JFrame gerenciarEmpregado = new JFrame(); // Cria um novo objeto do tipo JFrame com o nome gerenciarEmpregado
@@ -182,12 +182,12 @@ public class EmpregadoGUI {
     }
 
     public boolean validaCampos(){
-        if ((empregado.getNomeEmpregado() == null) && (empregado.getSetor()==null)){
+        if (empregado == null){
             message.mensagemErro();
             return false;
         }
-        if (empregado == null){
-            message.mensagemErro();
+        if ((empregado.getNomeEmpregado() == null) && (empregado.getSetor()==null)){
+//            message.mensagemErro();
             return false;
         }
         return true;
