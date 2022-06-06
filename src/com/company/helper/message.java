@@ -40,5 +40,11 @@ public class message {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void mensagemUsurioNaoEncontrado(){
+        JOptionPane.showMessageDialog(null,
+                "Por favor, informe o usuário a ser deletado",
+                "Usuário não encontrado",
+                JOptionPane.ERROR_MESSAGE);
+    }
 
 }
